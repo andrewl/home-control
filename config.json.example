@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Kitchen Light On",
+    "type": "button",
+    "icon": "💡",
+    "url": "http://192.168.0.173:1880/kitchen-lights/on"
+  },
+  {
+    "name": "Kitchen Light Off",
+    "type": "button",
+    "icon": "💡",
+    "url": "http://192.168.0.173:1880/kitchen-lights/off"
+  },
+  {
+    "name": "Volume",
+    "type": "slider",
+    "min": 0,
+    "max": 100,
+    "url": "http://example.com/volume"
+  }
+]
+
+

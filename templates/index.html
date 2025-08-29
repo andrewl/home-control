@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Control Panel</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>Control Panel</h1>
+  <div id="grid">
+    {{range .}}
+      {{if eq .Type "button"}}
+        <button class="grid-item button" onclick="activate('{{.Name}}')">
+          {{.Icon}} {{.Name}}
+        </button>
+      {{else if eq .Type "slider"}}
+        <div class="grid-item slider">
+          <label>{{.Name}}</label>
+          <input type="range" min="{{.Min}}" max="{{.Max}}" value="{{.Value}}" 
+                 oninput="activate('{{.Name}}', this.value)">
+        </div>
+      {{end}}
+    {{end}}
+  </div>
+
+  <!-- Notification container -->
+  <div id="notification"></div>
+
+  <script>
+    async function activate(name, value=null) {
+      try {
+        const res = await fetch("/activate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, value })
+        });
+
+        const text = await res.text();
+        if (!res.ok) {
+          showNotification("❌ Error: " + text, true);
+        } else {
+          const data = JSON.parse(text);
+          showNotification("✅ " + data.message, false);
+        }
+      } catch (err) {
+        showNotification("❌ Request failed: " + err.message, true);
+      }
+    }
+
+    function showNotification(msg, isError=false) {
+      const container = document.getElementById("notification");
+      const div = document.createElement("div");
+      div.className = "toast " + (isError ? "error" : "success");
+      div.textContent = msg;
+
+      container.appendChild(div);
+
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        div.remove();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
