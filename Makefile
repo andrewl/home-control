@@ -43,3 +43,11 @@ run-local: ## Run the Go app locally without Docker
 test: ## Run Go unit tests with coverage
 	go test ./... -v -cover
 
+.PHONY: release
+release: ## Create a new git tag and push it to trigger GitHub Actions for release. Usage: make release VERSION=v1.2.3
+ifndef VERSION
+	$(error VERSION is not set. Usage: make release VERSION=v1.2.3)
+endif
+	git tag $(VERSION)
+	git push origin $(VERSION)
+	@echo "🚀 Release $(VERSION) pushed. GitHub Actions will now build and publish Docker image."
