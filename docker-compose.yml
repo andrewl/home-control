@@ -1,15 +1,11 @@
 services:
   control-panel:
-    build: .
-    container_name: control-panel
+    image: ghcr.io/andrewl/home-control:latest
     ports:
       - "8080:8080"
     volumes:
-      # Mount config so it can be edited without rebuild
       - ./config.json:/app/config.json:ro
-      # Optionally mount templates and static assets for hot-reload
       - ./templates:/app/templates:ro
       - ./static:/app/static:ro
     restart: unless-stopped
-
 

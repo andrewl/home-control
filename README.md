@@ -7,44 +7,6 @@ success/error back to the UI with temporary toast messages.
 
 ---
 
-## Features
-
-* Configurable via JSON (`config.json`)
-* Buttons and sliders with labels/icons
-* Slider default values fetched server‑side from a backend‑only API
-* Backend calls target URLs on activation (button press / slider change)
-* Frontend feedback (✅ success / ❌ error toast messages)
-* **Live config reload** (backend re-reads `config.json` on every request)
-* Dockerfile + Docker Compose for packaging
-* Makefile with common commands (build/run/test/etc.)
-
----
-
-## Project Structure
-
-```
-.
-├─ main.go
-├─ config.json
-├─ templates/
-│  └─ index.html
-├─ static/
-│  └─ style.css
-├─ Dockerfile
-├─ docker-compose.yml
-└─ Makefile
-```
-
----
-
-## Prerequisites
-
-* [Go 1.22+](https://golang.org/dl/) (for local development)
-* [Docker](https://docs.docker.com/get-docker/)
-* [Docker Compose](https://docs.docker.com/compose/)
-
----
-
 ## Quick Start
 
 ### Run locally (no Docker)
@@ -164,46 +126,6 @@ config and static assets read‑only for safety and live editing.
 
 * Stage 1: Build static Go binary (`CGO_ENABLED=0`)
 * Stage 2: Minimal Alpine runtime, copy binary and assets, expose `:8080`
-
-### `docker-compose.yml`
-
-Key parts:
-
-```yaml
-services:
-  control-panel:
-    build: .
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./config.json:/app/config.json:ro
-      - ./templates:/app/templates:ro
-      - ./static:/app/static:ro
-    restart: unless-stopped
-```
-
----
-
-## Testing
-
-Run all tests (verbose, with coverage):
-
-```bash
-make test
-```
-
----
-
-## Troubleshooting
-
-* **No changes after editing `config.json`**: Ensure it is mounted via Compose and
-  refresh the page. The backend re-reads it each request.
-* **Network errors on activation**: Toast will show the error text; also check server logs
-  (`make logs`). Verify the target URL is reachable from the container/host.
-* **Default slider value doesn’t update**: Implement your real API call in `fetchDefaultValue`
-  and confirm the API is reachable. Consider timeouts/retries as needed.
-
----
 
 ## License
 
