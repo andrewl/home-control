@@ -26,7 +26,7 @@ COPY --from=builder /app/server .
 # Copy static files and templates
 COPY static/ ./static/
 COPY templates/ ./templates/
-COPY config.json ./config.json
+COPY config.json.example ./config.json
 
 # Expose HTTP port
 EXPOSE 8080
